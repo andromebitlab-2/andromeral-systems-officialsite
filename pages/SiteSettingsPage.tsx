@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../services/supabase';
 import Spinner from '../components/Spinner';
@@ -77,8 +76,13 @@ const SiteSettingsPage: React.FC = () => {
                         {bannerUrl ? (
                             <img src={bannerUrl} alt="Main Banner" className="w-full h-full object-cover" />
                         ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-[rgb(229,178,205)] to-[rgb(144,158,212)] flex items-center justify-center">
-                                <span className="text-white font-medium">Default Gradient</span>
+                            <div 
+                                className="w-full h-full flex items-center justify-center"
+                                style={{
+                                    background: 'linear-gradient(135deg, rgb(229,178,205) 0%, rgb(186,168,209) 50%, rgb(144,158,212) 100%)'
+                                }}
+                            >
+                                <span className="text-white font-medium drop-shadow-md">Default Gradient</span>
                             </div>
                         )}
                     </div>

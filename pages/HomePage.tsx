@@ -25,7 +25,12 @@ const HomePage: React.FC = () => {
          {bannerUrl ? (
             <img src={bannerUrl} alt="Background" className="w-full h-full object-cover" />
          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[rgb(229,178,205)] via-[rgb(186,168,209)] to-[rgb(144,158,212)]" />
+            <div 
+                className="w-full h-full"
+                style={{
+                    background: 'linear-gradient(135deg, rgb(229,178,205) 0%, rgb(186,168,209) 50%, rgb(144,158,212) 100%)'
+                }}
+            />
          )}
          {/* Overlay for text readability */}
          <div className="absolute inset-0 bg-white/60 backdrop-blur-sm"></div>
