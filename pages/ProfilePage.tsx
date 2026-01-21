@@ -39,13 +39,19 @@ const ProfilePage: React.FC = () => {
         let avatarUrlToUpdate = profile.avatar_url;
 
         if (avatarFile) {
-            const fileName = `${profile.id}/${Date.now()}-${avatarFile.name}`;
+            // FIX: Sanitize the filename to ensure it works with Supabase RLS policies.
+            // Removing spaces and special characters keeps the path clean.
+            const fileExt = avatarFile.name.split('.').pop();
+            const cleanFileName = avatarFile.name.replace(/[^a-zA-Z0-9]/g, '_'); 
+            const fileName = `${profile.id}/${Date.now()}_${cleanFileName}.${fileExt}`;
+
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
                 .upload(fileName, avatarFile, { upsert: true });
             
             if (uploadError) {
-                setError('Failed to upload new avatar.');
+                console.error("Upload error details:", uploadError);
+                setError(`Failed to upload new avatar: ${uploadError.message}`);
                 setLoading(false);
                 return;
             }
@@ -77,40 +83,67 @@ const ProfilePage: React.FC = () => {
     }
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h1 className="text-3xl font-bold mb-6">Edit Your Profile</h1>
-            <form onSubmit={handleUpdateProfile} className="space-y-6">
-                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" value={session?.user?.email || ''} disabled className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm cursor-not-allowed"/>
-                 </div>
-                 <div>
-                    <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[rgb(146,163,243)] focus:border-[rgb(146,163,243)]"/>
-                 </div>
-                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
-                    <div className="mt-2 flex items-center space-x-4">
-                        {avatarPreview ? (
-                            <img src={avatarPreview} alt="Avatar preview" className="h-20 w-20 rounded-full object-cover" />
-                        ) : (
-                             <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
-                                <span className="text-2xl text-gray-500">{username.charAt(0).toUpperCase()}</span>
-                             </div>
-                        )}
-                        <input type="file" onChange={handleAvatarChange} accept="image/*" className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-[rgb(146,163,243)] hover:file:bg-violet-100"/>
+        <div className="max-w-2xl mx-auto mt-10">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                <h1 className="text-2xl font-bold text-slate-900 mb-1">Account Settings</h1>
+                <p className="text-slate-500 mb-8 text-sm">Manage your public profile and details.</p>
+                
+                <form onSubmit={handleUpdateProfile} className="space-y-8">
+                    {/* Avatar Section */}
+                    <div className="flex items-center gap-6">
+                        <div className="relative group">
+                            <div className="h-24 w-24 rounded-full overflow-hidden bg-slate-100 ring-4 ring-slate-50">
+                                {avatarPreview ? (
+                                    <img src={avatarPreview} alt="Avatar preview" className="h-full w-full object-cover" />
+                                ) : (
+                                    <div className="h-full w-full flex items-center justify-center bg-slate-900 text-white text-3xl font-medium">
+                                        {username.charAt(0).toUpperCase()}
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="avatar-upload" className="absolute inset-0 flex items-center justify-center bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-full">
+                                <span className="text-xs font-medium">Change</span>
+                            </label>
+                            <input id="avatar-upload" type="file" onChange={handleAvatarChange} accept="image/*" className="hidden"/>
+                        </div>
+                        <div>
+                            <h3 className="font-medium text-slate-900">Profile Picture</h3>
+                            <p className="text-xs text-slate-500 mt-1">Recommended: Square JPG, PNG. Max 2MB.</p>
+                        </div>
                     </div>
-                 </div>
 
-                 {error && <p className="text-sm text-red-600">{error}</p>}
-                 {success && <p className="text-sm text-green-600">{success}</p>}
+                    <div className="grid gap-6">
+                        <div>
+                            <label htmlFor="email" className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email</label>
+                            <input type="email" id="email" value={session?.user?.email || ''} disabled className="block w-full px-4 py-3 bg-slate-50 border-transparent rounded-lg text-slate-500 text-sm focus:ring-0 cursor-not-allowed"/>
+                        </div>
+                        <div>
+                            <label htmlFor="username" className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Username</label>
+                            <input 
+                                type="text" 
+                                id="username" 
+                                value={username} 
+                                onChange={(e) => setUsername(e.target.value)} 
+                                required 
+                                className="block w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all outline-none"
+                            />
+                        </div>
+                    </div>
 
-                 <div>
-                    <button type="submit" disabled={loading} className="w-full mt-4 py-3 text-white bg-gradient-to-r from-[rgb(146,163,243)] to-[rgb(241,125,215)] rounded-lg shadow-md hover:shadow-lg transition-shadow disabled:opacity-50">
-                        {loading ? 'Saving...' : 'Save Changes'}
-                    </button>
-                 </div>
-            </form>
+                    {error && <div className="p-4 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">{error}</div>}
+                    {success && <div className="p-4 bg-green-50 text-green-600 text-sm rounded-lg border border-green-100">{success}</div>}
+
+                    <div className="pt-4 border-t border-slate-100 flex justify-end">
+                        <button 
+                            type="submit" 
+                            disabled={loading} 
+                            className="px-6 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                        >
+                            {loading ? 'Saving Changes...' : 'Save Changes'}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

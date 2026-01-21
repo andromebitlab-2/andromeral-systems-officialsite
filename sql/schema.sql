@@ -1,3 +1,4 @@
+
 -- ### ANDROMERAL SYSTEMS SCHEMA ###
 
 -- 1. PROFILES TABLE
@@ -70,6 +71,19 @@ CREATE TABLE public.post_blocks (
 );
 ALTER TABLE public.post_blocks ENABLE ROW LEVEL SECURITY;
 
+-- 6. SITE SETTINGS TABLE (NEW)
+CREATE TABLE public.site_settings (
+    id integer PRIMARY KEY DEFAULT 1,
+    home_banner_url text,
+    hero_title text DEFAULT 'Design. Intelligence. Imagination.',
+    hero_subtitle text DEFAULT 'Welcome to Andromeral Systems. We explore the frontiers where artificial intelligence meets human creativity.',
+    CONSTRAINT single_row CHECK (id = 1)
+);
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+
+-- Insert default row
+INSERT INTO public.site_settings (id, home_banner_url) VALUES (1, NULL) ON CONFLICT DO NOTHING;
+
 
 -- ### ROW LEVEL SECURITY (RLS) POLICIES ###
 
@@ -128,6 +142,10 @@ CREATE POLICY "Staff can manage post-tag links." ON public.post_tags FOR ALL USI
 -- Post_Blocks
 CREATE POLICY "Post blocks are viewable by everyone." ON public.post_blocks FOR SELECT USING (true);
 CREATE POLICY "Staff can manage post blocks." ON public.post_blocks FOR ALL USING (is_staff());
+
+-- RLS for SITE SETTINGS
+CREATE POLICY "Site settings are viewable by everyone." ON public.site_settings FOR SELECT USING (true);
+CREATE POLICY "Staff can manage site settings." ON public.site_settings FOR UPDATE USING (is_staff());
 
 
 -- ### STORAGE ###

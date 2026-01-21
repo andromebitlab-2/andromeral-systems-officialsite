@@ -11,6 +11,7 @@ import FeedPage from './pages/FeedPage';
 import PostPage from './pages/PostPage';
 import AdminPage from './pages/AdminPage';
 import ProfilePage from './pages/ProfilePage';
+import SiteSettingsPage from './pages/SiteSettingsPage';
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,14 @@ const App: React.FC = () => {
                     element={
                       <ProtectedRoute>
                         <ProfilePage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/settings"
+                    element={
+                      <ProtectedRoute requireStaff={true}>
+                        <SiteSettingsPage />
                       </ProtectedRoute>
                     }
                   />

@@ -205,7 +205,7 @@ const AdminPage: React.FC = () => {
                  <input type="text" placeholder="Banner Image URL" value={bannerUrl} onChange={e => setBannerUrl(e.target.value)} className="w-full p-2 border rounded"/>
                  <div>
                     <label className="block text-sm font-medium text-gray-700">Or upload banner:</label>
-                    <input type="file" onChange={handleBannerUpload} accept="image/*" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-[rgb(146,163,243)] hover:file:bg-violet-100"/>
+                    <input type="file" onChange={handleBannerUpload} accept="image/*" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-[rgb(144,158,212)] hover:file:bg-violet-100"/>
                  </div>
                  <select value={category} onChange={e => setCategory(e.target.value)} className="w-full p-2 border rounded bg-white"><option value="HelaIA">HelaIA</option><option value="Creative Imagination">Creative Imagination</option><option value="Otros">Otros</option></select>
             </div>
@@ -213,7 +213,7 @@ const AdminPage: React.FC = () => {
             <hr className="my-6"/>
             <h2 className="text-2xl font-semibold mb-2">Tags</h2>
             <div className="flex flex-wrap gap-2 mb-4">
-                {allTags.map(tag => <button key={tag.id} onClick={() => handleTagSelection(tag.id)} className={`px-3 py-1 text-sm rounded-full ${selectedTags.has(tag.id) ? 'bg-[rgb(146,163,243)] text-white' : 'bg-gray-200 text-gray-700'}`}>{tag.name}</button>)}
+                {allTags.map(tag => <button key={tag.id} onClick={() => handleTagSelection(tag.id)} className={`px-3 py-1 text-sm rounded-full ${selectedTags.has(tag.id) ? 'bg-[rgb(144,158,212)] text-white' : 'bg-gray-200 text-gray-700'}`}>{tag.name}</button>)}
             </div>
             <div className="flex gap-2">
                 <input type="text" placeholder="New tag name" value={newTagName} onChange={e => setNewTagName(e.target.value)} className="flex-grow p-2 border rounded"/>
@@ -235,7 +235,7 @@ const AdminPage: React.FC = () => {
                 <button onClick={() => addBlock(BlockType.CHANGELOG)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Add Changelog</button>
             </div>
             
-            <button onClick={handleSavePost} disabled={isSubmitting} className="w-full mt-6 py-3 text-white bg-gradient-to-r from-[rgb(146,163,243)] to-[rgb(241,125,215)] rounded-lg shadow-md hover:shadow-lg transition-shadow disabled:opacity-50">
+            <button onClick={handleSavePost} disabled={isSubmitting} className="w-full mt-6 py-3 text-white bg-gradient-to-r from-[rgb(144,158,212)] to-[rgb(229,178,205)] rounded-lg shadow-md hover:shadow-lg transition-shadow disabled:opacity-50">
                 {isSubmitting ? 'Saving...' : (postId ? 'Update Post' : 'Publish Post')}
             </button>
         </div>

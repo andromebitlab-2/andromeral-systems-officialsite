@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../services/supabase';
@@ -74,7 +75,7 @@ const PostPage: React.FC = () => {
             ))}
         </div>
         {profile?.is_staff && (
-            <Link to={`/admin/${post.id}`} className="mt-4 inline-block text-sm text-[rgb(146,163,243)] hover:underline">
+            <Link to={`/admin/${post.id}`} className="mt-4 inline-block text-sm text-[rgb(144,158,212)] hover:underline">
                 Edit Post
             </Link>
         )}

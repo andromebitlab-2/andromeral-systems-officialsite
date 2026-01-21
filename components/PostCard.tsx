@@ -7,27 +7,38 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   const authorInitial = author?.username ? author.username.charAt(0).toUpperCase() : '?';
 
   return (
-    <Link to={`/posts/${post.id}`} className="block group">
-      <div className="overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
-        <img className="object-cover w-full h-48" src={post.banner_image_url} alt={post.title} />
+    <Link to={`/posts/${post.id}`} className="block group h-full">
+      <div className="bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-slate-300 transition-all duration-300 flex flex-col h-full hover:shadow-md">
+        <div className="aspect-video w-full overflow-hidden bg-slate-100">
+          <img 
+            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" 
+            src={post.banner_image_url} 
+            alt={post.title} 
+            loading="lazy"
+          />
+        </div>
         <div className="p-6 flex-1 flex flex-col">
-          <h2 className="text-2xl font-bold text-gray-800 group-hover:text-[rgb(146,163,243)] transition-colors duration-300">{post.title}</h2>
-          <div className="flex items-center mt-4 text-sm text-gray-600">
-            {author?.avatar_url ? (
-              <img src={author.avatar_url} alt={author.username || 'author'} className="w-8 h-8 rounded-full mr-3 object-cover" />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                  <span className="font-semibold text-gray-500">{authorInitial}</span>
-              </div>
-            )}
-            <span>By {author?.username || 'Unknown Author'}</span>
+          <div className="mb-3">
+             <span className="text-xs font-bold tracking-wider uppercase text-[rgb(144,158,212)]">
+                {post.category}
+             </span>
           </div>
-          <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
-            {post.tags?.map(tag => (
-              <span key={tag.id} className="px-2 py-1 text-xs font-semibold text-white rounded" style={{ backgroundColor: tag.color || '#6B7280' }}>
-                {tag.name}
-              </span>
-            ))}
+          <h2 className="text-xl font-bold text-slate-900 leading-tight mb-3 group-hover:text-[rgb(229,178,205)] transition-colors">
+            {post.title}
+          </h2>
+          
+          <div className="mt-auto pt-4 flex items-center justify-between">
+            <div className="flex items-center">
+                {author?.avatar_url ? (
+                <img src={author.avatar_url} alt={author.username || 'author'} className="w-6 h-6 rounded-full mr-2 object-cover" />
+                ) : (
+                <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center mr-2">
+                    <span className="text-xs font-semibold text-slate-500">{authorInitial}</span>
+                </div>
+                )}
+                <span className="text-xs font-medium text-slate-500">{author?.username || 'Unknown'}</span>
+            </div>
+            <span className="text-xs text-slate-400">{new Date(post.created_at).toLocaleDateString()}</span>
           </div>
         </div>
       </div>

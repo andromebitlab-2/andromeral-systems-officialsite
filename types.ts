@@ -1,8 +1,16 @@
+
 export interface Profile {
   id: string;
   username: string;
   is_staff: boolean;
   avatar_url?: string | null;
+}
+
+export interface SiteSettings {
+    id: number;
+    home_banner_url: string | null;
+    hero_title: string;
+    hero_subtitle: string;
 }
 
 export interface Post {
@@ -71,6 +79,26 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      site_settings: {
+        Row: {
+            id: number
+            home_banner_url: string | null
+            hero_title: string
+            hero_subtitle: string
+        }
+        Insert: {
+            id?: number
+            home_banner_url?: string | null
+            hero_title?: string
+            hero_subtitle?: string
+        }
+        Update: {
+            id?: number
+            home_banner_url?: string | null
+            hero_title?: string
+            hero_subtitle?: string
+        }
+      }
       post_blocks: {
         Row: {
           content: Json

@@ -52,32 +52,50 @@ const FeedPage: React.FC<FeedPageProps> = ({ category }) => {
   }, [category, searchTerm]);
 
   return (
-    <div>
-        <div className="flex justify-between items-center mb-6">
-            <h1 className="text-4xl font-bold">{category}</h1>
+    <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+            <div>
+                <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{category}</h1>
+                <p className="text-slate-500 mt-2 text-sm">Explore the latest content in {category}.</p>
+            </div>
             {profile?.is_staff && (
-                <Link to="/admin" className="px-4 py-2 text-white bg-gradient-to-r from-[rgb(146,163,243)] to-[rgb(241,125,215)] rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <Link to="/admin" className="px-5 py-2.5 text-sm font-medium text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors shadow-sm">
                     + New Post
                 </Link>
             )}
         </div>
-      <div className="mb-6">
-        <input
-          type="text"
-          placeholder="Search posts..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[rgb(146,163,243)] focus:border-[rgb(146,163,243)]"
-        />
+      <div className="mb-10">
+        <div className="relative max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                </svg>
+            </div>
+            <input
+            type="text"
+            placeholder="Search articles..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-all text-sm"
+            />
+        </div>
       </div>
       {loading ? (
         <Spinner />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.length > 0 ? (
             posts.map(post => <PostCard key={post.id} post={post} />)
           ) : (
-            <p className="col-span-full text-center text-gray-500">No posts found.</p>
+            <div className="col-span-full py-20 text-center">
+                <div className="inline-block p-4 rounded-full bg-slate-100 mb-4">
+                    <svg className="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                </div>
+                <p className="text-slate-500 font-medium">No posts found.</p>
+                <p className="text-slate-400 text-sm">Try adjusting your search terms.</p>
+            </div>
           )}
         </div>
       )}

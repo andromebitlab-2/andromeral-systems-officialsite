@@ -1,3 +1,4 @@
+
 import React from 'react';
 import type { PostBlock } from '../types';
 import { BlockType } from '../types';
@@ -28,8 +29,8 @@ const PostRenderer: React.FC<PostRendererProps> = ({ blocks }) => {
             );
           case BlockType.CHANGELOG:
             return (
-              <div key={index} className="border-l-4 border-[rgb(146,163,243)] p-4 my-6 bg-blue-50 rounded-r-lg">
-                <h3 className="font-bold text-lg text-[rgb(146,163,243)]">Version {block.content.version}</h3>
+              <div key={index} className="border-l-4 border-[rgb(144,158,212)] p-4 my-6 bg-slate-50 rounded-r-lg">
+                <h3 className="font-bold text-lg text-[rgb(144,158,212)]">Version {block.content.version}</h3>
                 <ul className="list-disc list-inside mt-2">
                   {block.content.changes?.map((change, i) => (
                     <li key={i} className="text-gray-700">{change}</li>
