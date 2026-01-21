@@ -145,9 +145,18 @@ CREATE POLICY "Staff can delete post banners" ON storage.objects FOR DELETE USIN
 
 -- Policies for 'avatars' bucket
 CREATE POLICY "Public read access for avatars" ON storage.objects FOR SELECT USING ( bucket_id = 'avatars' );
-CREATE POLICY "Users can upload their own avatar" ON storage.objects FOR INSERT WITH CHECK ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
-CREATE POLICY "Users can update their own avatar" ON storage.objects FOR UPDATE USING ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
-CREATE POLICY "Users can delete their own avatar" ON storage.objects FOR DELETE USING ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
+
+CREATE POLICY "Users can insert their own avatar" ON storage.objects
+  FOR INSERT
+  WITH CHECK ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
+
+CREATE POLICY "Users can update their own avatar" ON storage.objects
+  FOR UPDATE
+  USING ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
+
+CREATE POLICY "Users can delete their own avatar" ON storage.objects
+  FOR DELETE
+  USING ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
 
 
 -- ### ADMIN SETUP INSTRUCTIONS ###
@@ -160,4 +169,3 @@ CREATE POLICY "Users can delete their own avatar" ON storage.objects FOR DELETE 
 -- UPDATE public.profiles
 -- SET is_staff = true
 -- WHERE id = 'user_id_to_make_admin';
---
