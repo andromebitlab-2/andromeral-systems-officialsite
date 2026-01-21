@@ -19,7 +19,7 @@ const Sidebar: React.FC = () => {
       </div>
       <nav className="flex-1 py-4">
         <NavLink to="/" className={({ isActive }) => `${linkBaseClass} ${isActive ? activeLinkClass : inactiveLinkClass}`}>
-          <span>Home</span>
+          <span>Inicio</span>
         </NavLink>
         <a 
             href="https://ci-andromeral-systems.vercel.app/#creative" 
@@ -42,10 +42,10 @@ const Sidebar: React.FC = () => {
                Admin
              </div>
              <NavLink to="/admin" end className={({ isActive }) => `${linkBaseClass} ${isActive ? activeLinkClass : inactiveLinkClass}`}>
-               <span>Dashboard</span>
+               <span>Panel</span>
              </NavLink>
              <NavLink to="/admin/settings" className={({ isActive }) => `${linkBaseClass} ${isActive ? activeLinkClass : inactiveLinkClass}`}>
-               <span>Site Settings</span>
+               <span>Configuración</span>
              </NavLink>
            </div>
         )}

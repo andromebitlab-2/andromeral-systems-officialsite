@@ -36,7 +36,7 @@ const SiteSettingsPage: React.FC = () => {
         // Using 'post-banners' for simplicity, ideally separate bucket
         const { error } = await supabase.storage.from('post-banners').upload(fileName, file);
         if (error) {
-            alert('Error uploading banner image.');
+            alert('Error al subir la imagen del banner.');
             console.error(error);
         } else {
             const { data } = supabase.storage.from('post-banners').getPublicUrl(fileName);
@@ -55,10 +55,10 @@ const SiteSettingsPage: React.FC = () => {
         });
 
         if (error) {
-            alert('Failed to save settings.');
+            alert('Error al guardar la configuración.');
             console.error(error);
         } else {
-            alert('Settings saved successfully!');
+            alert('¡Configuración guardada con éxito!');
         }
         setSaving(false);
     };
@@ -67,11 +67,11 @@ const SiteSettingsPage: React.FC = () => {
 
     return (
         <div className="max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-sm border border-slate-100">
-            <h1 className="text-2xl font-bold text-slate-900 mb-6">Site Configuration</h1>
+            <h1 className="text-2xl font-bold text-slate-900 mb-6">Configuración del Sitio</h1>
             
             <div className="space-y-6">
                 <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Main Banner Image</label>
+                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Imagen del Banner Principal</label>
                     <div className="mb-4 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 aspect-video relative flex items-center justify-center">
                         {bannerUrl ? (
                             <img src={bannerUrl} alt="Main Banner" className="w-full h-full object-cover" />
@@ -82,7 +82,7 @@ const SiteSettingsPage: React.FC = () => {
                                     background: 'linear-gradient(135deg, rgb(229,178,205) 0%, rgb(186,168,209) 50%, rgb(144,158,212) 100%)'
                                 }}
                             >
-                                <span className="text-white font-medium drop-shadow-md">Default Gradient</span>
+                                <span className="text-white font-medium drop-shadow-md">Gradiente por Defecto</span>
                             </div>
                         )}
                     </div>
@@ -90,12 +90,12 @@ const SiteSettingsPage: React.FC = () => {
                 </div>
 
                 <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Hero Title</label>
+                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Título Hero</label>
                     <input type="text" value={heroTitle} onChange={e => setHeroTitle(e.target.value)} className="block w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-[rgb(144,158,212)] focus:border-transparent outline-none"/>
                 </div>
 
                 <div>
-                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Hero Subtitle</label>
+                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Subtítulo Hero</label>
                     <textarea value={heroSubtitle} onChange={e => setHeroSubtitle(e.target.value)} rows={3} className="block w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-[rgb(144,158,212)] focus:border-transparent outline-none"/>
                 </div>
 
@@ -105,7 +105,7 @@ const SiteSettingsPage: React.FC = () => {
                         disabled={saving} 
                         className="px-6 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50 shadow-sm"
                     >
-                        {saving ? 'Saving...' : 'Save Settings'}
+                        {saving ? 'Guardando...' : 'Guardar Configuración'}
                     </button>
                 </div>
             </div>

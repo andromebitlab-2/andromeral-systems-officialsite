@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../services/supabase';
@@ -42,7 +41,7 @@ const PostPage: React.FC = () => {
   }, [id]);
 
   if (loading) return <Spinner />;
-  if (!post) return <div className="text-center text-red-500">Post not found.</div>;
+  if (!post) return <div className="text-center text-red-500">Post no encontrado.</div>;
   
   const author = post.profiles;
   const authorInitial = author?.username ? author.username.charAt(0).toUpperCase() : '?';
@@ -61,9 +60,9 @@ const PostPage: React.FC = () => {
             </div>
           )}
           <div>
-            <span>By {author?.username || 'Unknown'}</span>
+            <span>Por {author?.username || 'Desconocido'}</span>
             <div className="flex items-center">
-                <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                <span>{new Date(post.created_at).toLocaleDateString('es-ES')}</span>
             </div>
           </div>
         </div>
@@ -76,7 +75,7 @@ const PostPage: React.FC = () => {
         </div>
         {profile?.is_staff && (
             <Link to={`/admin/${post.id}`} className="mt-4 inline-block text-sm text-[rgb(144,158,212)] hover:underline">
-                Edit Post
+                Editar Post
             </Link>
         )}
       </header>

@@ -68,25 +68,25 @@ const SignupPage: React.FC = () => {
       <div className="w-full max-w-md p-10 bg-white rounded-2xl shadow-sm border border-slate-100">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-slate-900">
-            Create an account
+            Crear una cuenta
           </h2>
-          <p className="text-slate-500 text-sm mt-2">Join Andromeral Systems today.</p>
+          <p className="text-slate-500 text-sm mt-2">Únete a Andromeral Systems hoy.</p>
         </div>
         
         <form className="space-y-5" onSubmit={handleSignup}>
           
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Username</label>
-            <input type="text" placeholder="johndoe" required value={username} onChange={(e) => setUsername(e.target.value)} className="block w-full px-4 py-3 bg-slate-50 border-transparent rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all outline-none"/>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Nombre de usuario</label>
+            <input type="text" placeholder="juanperez" required value={username} onChange={(e) => setUsername(e.target.value)} className="block w-full px-4 py-3 bg-slate-50 border-transparent rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all outline-none"/>
           </div>
 
           <div>
-             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email</label>
-             <input type="email" placeholder="name@company.com" required value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full px-4 py-3 bg-slate-50 border-transparent rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all outline-none"/>
+             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Correo electrónico</label>
+             <input type="email" placeholder="nombre@empresa.com" required value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full px-4 py-3 bg-slate-50 border-transparent rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all outline-none"/>
           </div>
 
           <div className="relative">
-             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Password</label>
+             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Contraseña</label>
              <div className="relative">
                  <input type={showPassword ? 'text' : 'password'} placeholder="••••••••" required value={password} onChange={(e) => setPassword(e.target.value)} className="block w-full px-4 py-3 bg-slate-50 border-transparent rounded-lg text-slate-900 text-sm focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all outline-none"/>
                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 hover:text-slate-600">
@@ -100,7 +100,7 @@ const SignupPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Profile Picture (Optional)</label>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Foto de perfil (Opcional)</label>
             <input type="file" onChange={(e) => setAvatarFile(e.target.files ? e.target.files[0] : null)} accept="image/*" className="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"/>
           </div>
 
@@ -108,14 +108,14 @@ const SignupPage: React.FC = () => {
 
           <div>
             <button type="submit" disabled={loading} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 disabled:opacity-50 transition-colors">
-              {loading ? 'Creating account...' : 'Sign up'}
+              {loading ? 'Creando cuenta...' : 'Registrarse'}
             </button>
           </div>
         </form>
          <p className="mt-6 text-sm text-center text-slate-500">
-          Already have an account?{' '}
+          ¿Ya tienes una cuenta?{' '}
           <Link to="/login" className="font-semibold text-slate-900 hover:underline">
-            Sign in
+            Iniciar sesión
           </Link>
         </p>
       </div>

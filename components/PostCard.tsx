@@ -36,7 +36,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
                     <span className="text-xs font-semibold text-slate-500">{authorInitial}</span>
                 </div>
                 )}
-                <span className="text-xs font-medium text-slate-500">{author?.username || 'Unknown'}</span>
+                <span className="text-xs font-medium text-slate-500">{author?.username || 'Desconocido'}</span>
             </div>
             <span className="text-xs text-slate-400">{new Date(post.created_at).toLocaleDateString()}</span>
           </div>

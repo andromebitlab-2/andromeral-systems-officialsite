@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../services/supabase';
 
 const HomePage: React.FC = () => {
-  const [heroTitle, setHeroTitle] = useState('Design. Intelligence. Imagination.');
-  const [heroSubtitle, setHeroSubtitle] = useState('Welcome to Andromeral Systems. We explore the frontiers where artificial intelligence meets human creativity.');
+  const [heroTitle, setHeroTitle] = useState('Diseño. Inteligencia. Imaginación.');
+  const [heroSubtitle, setHeroSubtitle] = useState('Bienvenido a Andromeral Systems. Exploramos las fronteras donde la inteligencia artificial se encuentra con la creatividad humana.');
   const [bannerUrl, setBannerUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -51,10 +51,10 @@ const HomePage: React.FC = () => {
           
           <div className="mt-10 flex flex-wrap justify-center gap-4">
              <a href="#/helaia" className="px-8 py-3 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors shadow-lg">
-                Explore HelaIA
+                Explorar HelaIA
              </a>
              <a href="https://ci-andromeral-systems.vercel.app/" target="_blank" rel="noreferrer" className="px-8 py-3 rounded-full bg-white/80 backdrop-blur-md border border-slate-200 text-slate-900 font-medium hover:bg-white transition-colors shadow-sm">
-                Creative System
+                Sistema Creativo
              </a>
           </div>
       </div>

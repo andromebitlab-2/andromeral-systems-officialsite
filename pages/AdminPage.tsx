@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../services/supabase';
@@ -129,7 +128,7 @@ const AdminPage: React.FC = () => {
     };
 
     const handleSavePost = async () => {
-        if (!profile || !title || !bannerUrl) return alert('Title and Banner are required.');
+        if (!profile || !title || !bannerUrl) return alert('Se requieren Título y Banner.');
         setIsSubmitting(true);
 
         const postPayload = { title, banner_image_url: bannerUrl, category, author_id: profile.id };
@@ -137,10 +136,10 @@ const AdminPage: React.FC = () => {
 
         if (postId) {
             const { error } = await supabase.from('posts').update(postPayload).eq('id', postId);
-            if (error) { console.error(error); alert('Failed to update post.'); setIsSubmitting(false); return; }
+            if (error) { console.error(error); alert('Error al actualizar post.'); setIsSubmitting(false); return; }
         } else {
             const { data, error } = await supabase.from('posts').insert(postPayload).select('id').single();
-            if (error || !data) { console.error(error); alert('Failed to create post.'); setIsSubmitting(false); return; }
+            if (error || !data) { console.error(error); alert('Error al crear post.'); setIsSubmitting(false); return; }
             upsertedPostId = data.id;
         }
 
@@ -155,12 +154,12 @@ const AdminPage: React.FC = () => {
             const blocksToInsert = blocks.map((block, i) => ({ ...block, post_id: upsertedPostId, order: i }));
             if (blocksToInsert.length > 0) {
                 const { error } = await supabase.from('post_blocks').insert(blocksToInsert);
-                if (error) { console.error(error); alert('Failed to save content blocks.'); setIsSubmitting(false); return; }
+                if (error) { console.error(error); alert('Error al guardar bloques de contenido.'); setIsSubmitting(false); return; }
             }
         }
         
         setIsSubmitting(false);
-        alert(`Post ${postId ? 'updated' : 'created'}!`);
+        alert(`Post ${postId ? 'actualizado' : 'creado'}!`);
         navigate(`/posts/${upsertedPostId}`);
     };
 
@@ -171,72 +170,72 @@ const AdminPage: React.FC = () => {
             <button onClick={() => removeBlock(index)} className="absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold z-10">X</button>
             <h3 className="font-semibold capitalize mb-2 text-gray-500">{block.type}</h3>
             {block.type === BlockType.HEADER && <>
-                <input type="text" placeholder="Header Text..." className="w-full p-2 border rounded" value={block.content.text || ''} onChange={e => updateBlock(index, { ...block.content, text: e.target.value })} />
+                <input type="text" placeholder="Texto del encabezado..." className="w-full p-2 border rounded" value={block.content.text || ''} onChange={e => updateBlock(index, { ...block.content, text: e.target.value })} />
                 <select value={block.content.level || 2} className="mt-2 p-2 border rounded bg-white" onChange={e => updateBlock(index, { ...block.content, level: parseInt(e.target.value, 10) as any })}>
                     <option value={2}>H2</option><option value={3}>H3</option><option value= {4}>H4</option>
                 </select>
             </>}
-            {block.type === BlockType.TEXT && <textarea placeholder="Markdown supported text..." className="w-full p-2 border rounded" rows={5} value={block.content.text || ''} onChange={e => updateBlock(index, { text: e.target.value })} />}
+            {block.type === BlockType.TEXT && <textarea placeholder="Texto (soporta Markdown)..." className="w-full p-2 border rounded" rows={5} value={block.content.text || ''} onChange={e => updateBlock(index, { text: e.target.value })} />}
             {block.type === BlockType.IMAGE && <>
-                <input type="text" placeholder="Image URL" className="w-full p-2 border rounded" value={block.content.url || ''} onChange={e => updateBlock(index, { ...block.content, url: e.target.value })} />
-                <input type="text" placeholder="Alt text" className="w-full p-2 border rounded mt-2" value={block.content.alt || ''} onChange={e => updateBlock(index, { ...block.content, alt: e.target.value })} />
+                <input type="text" placeholder="URL de la imagen" className="w-full p-2 border rounded" value={block.content.url || ''} onChange={e => updateBlock(index, { ...block.content, url: e.target.value })} />
+                <input type="text" placeholder="Texto alternativo (Alt)" className="w-full p-2 border rounded mt-2" value={block.content.alt || ''} onChange={e => updateBlock(index, { ...block.content, alt: e.target.value })} />
             </>}
             {block.type === BlockType.CODE && <>
-                <input type="text" placeholder="Language (e.g., javascript)" className="w-full p-2 border rounded mb-2" value={block.content.language || ''} onChange={e => updateBlock(index, { ...block.content, language: e.target.value })} />
-                <textarea className="w-full p-2 border rounded font-mono" rows={8} placeholder="Code..." value={block.content.code || ''} onChange={e => updateBlock(index, { ...block.content, code: e.target.value })} />
+                <input type="text" placeholder="Lenguaje (ej: javascript)" className="w-full p-2 border rounded mb-2" value={block.content.language || ''} onChange={e => updateBlock(index, { ...block.content, language: e.target.value })} />
+                <textarea className="w-full p-2 border rounded font-mono" rows={8} placeholder="Código..." value={block.content.code || ''} onChange={e => updateBlock(index, { ...block.content, code: e.target.value })} />
             </>}
             {block.type === BlockType.QUOTE && <>
-                <textarea placeholder="Quote text..." className="w-full p-2 border rounded" value={block.content.text || ''} onChange={e => updateBlock(index, { ...block.content, text: e.target.value })} />
-                <input type="text" placeholder="Author" className="w-full p-2 border rounded mt-2" value={block.content.author || ''} onChange={e => updateBlock(index, { ...block.content, author: e.target.value })} />
+                <textarea placeholder="Cita..." className="w-full p-2 border rounded" value={block.content.text || ''} onChange={e => updateBlock(index, { ...block.content, text: e.target.value })} />
+                <input type="text" placeholder="Autor" className="w-full p-2 border rounded mt-2" value={block.content.author || ''} onChange={e => updateBlock(index, { ...block.content, author: e.target.value })} />
             </>}
             {block.type === BlockType.CHANGELOG && <>
-                 <input type="text" placeholder="Version (e.g., 1.0.0)" className="w-full p-2 border rounded mb-2" value={block.content.version || ''} onChange={e => updateBlock(index, {...block.content, version: e.target.value })} />
-                 <textarea placeholder="Changes (one per line)" rows={4} className="w-full p-2 border rounded" value={block.content.changes?.join('\n') || ''} onChange={e => updateBlock(index, {...block.content, changes: e.target.value.split('\n') })} />
+                 <input type="text" placeholder="Versión (ej: 1.0.0)" className="w-full p-2 border rounded mb-2" value={block.content.version || ''} onChange={e => updateBlock(index, {...block.content, version: e.target.value })} />
+                 <textarea placeholder="Cambios (uno por línea)" rows={4} className="w-full p-2 border rounded" value={block.content.changes?.join('\n') || ''} onChange={e => updateBlock(index, {...block.content, changes: e.target.value.split('\n') })} />
             </>}
         </div>
     );
 
     return (
         <div className="p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">{postId ? 'Edit Post' : 'Create New Post'}</h1>
+            <h1 className="text-3xl font-bold mb-6">{postId ? 'Editar Post' : 'Crear Nuevo Post'}</h1>
             
             <div className="space-y-4">
-                 <input type="text" placeholder="Post Title" value={title} onChange={e => setTitle(e.target.value)} className="w-full p-2 border rounded"/>
-                 <input type="text" placeholder="Banner Image URL" value={bannerUrl} onChange={e => setBannerUrl(e.target.value)} className="w-full p-2 border rounded"/>
+                 <input type="text" placeholder="Título del Post" value={title} onChange={e => setTitle(e.target.value)} className="w-full p-2 border rounded"/>
+                 <input type="text" placeholder="URL de la imagen del banner" value={bannerUrl} onChange={e => setBannerUrl(e.target.value)} className="w-full p-2 border rounded"/>
                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Or upload banner:</label>
+                    <label className="block text-sm font-medium text-gray-700">O subir banner:</label>
                     <input type="file" onChange={handleBannerUpload} accept="image/*" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-[rgb(144,158,212)] hover:file:bg-violet-100"/>
                  </div>
                  <select value={category} onChange={e => setCategory(e.target.value)} className="w-full p-2 border rounded bg-white"><option value="HelaIA">HelaIA</option><option value="Creative Imagination">Creative Imagination</option><option value="Otros">Otros</option></select>
             </div>
 
             <hr className="my-6"/>
-            <h2 className="text-2xl font-semibold mb-2">Tags</h2>
+            <h2 className="text-2xl font-semibold mb-2">Etiquetas</h2>
             <div className="flex flex-wrap gap-2 mb-4">
                 {allTags.map(tag => <button key={tag.id} onClick={() => handleTagSelection(tag.id)} className={`px-3 py-1 text-sm rounded-full ${selectedTags.has(tag.id) ? 'bg-[rgb(144,158,212)] text-white' : 'bg-gray-200 text-gray-700'}`}>{tag.name}</button>)}
             </div>
             <div className="flex gap-2">
-                <input type="text" placeholder="New tag name" value={newTagName} onChange={e => setNewTagName(e.target.value)} className="flex-grow p-2 border rounded"/>
-                <button onClick={handleAddNewTag} className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Add Tag</button>
+                <input type="text" placeholder="Nombre de nueva etiqueta" value={newTagName} onChange={e => setNewTagName(e.target.value)} className="flex-grow p-2 border rounded"/>
+                <button onClick={handleAddNewTag} className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Agregar Etiqueta</button>
             </div>
             
             <hr className="my-6"/>
-            <h2 className="text-2xl font-semibold mb-4">Content Blocks</h2>
+            <h2 className="text-2xl font-semibold mb-4">Bloques de Contenido</h2>
             <div className="space-y-4" onDragOver={e => e.preventDefault()}>
                 {blocks.map((block, index) => <BlockEditor key={block.id || index} block={block} index={index}/>)}
             </div>
 
             <div className="my-6 flex flex-wrap gap-2">
-                <button onClick={() => addBlock(BlockType.HEADER)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Add Header</button>
-                <button onClick={() => addBlock(BlockType.TEXT)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Add Text</button>
-                <button onClick={() => addBlock(BlockType.IMAGE)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Add Image</button>
-                <button onClick={() => addBlock(BlockType.CODE)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Add Code</button>
-                <button onClick={() => addBlock(BlockType.QUOTE)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Add Quote</button>
-                <button onClick={() => addBlock(BlockType.CHANGELOG)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Add Changelog</button>
+                <button onClick={() => addBlock(BlockType.HEADER)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Agregar Encabezado</button>
+                <button onClick={() => addBlock(BlockType.TEXT)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Agregar Texto</button>
+                <button onClick={() => addBlock(BlockType.IMAGE)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Agregar Imagen</button>
+                <button onClick={() => addBlock(BlockType.CODE)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Agregar Código</button>
+                <button onClick={() => addBlock(BlockType.QUOTE)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Agregar Cita</button>
+                <button onClick={() => addBlock(BlockType.CHANGELOG)} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Agregar Changelog</button>
             </div>
             
             <button onClick={handleSavePost} disabled={isSubmitting} className="w-full mt-6 py-3 text-white bg-gradient-to-r from-[rgb(144,158,212)] to-[rgb(229,178,205)] rounded-lg shadow-md hover:shadow-lg transition-shadow disabled:opacity-50">
-                {isSubmitting ? 'Saving...' : (postId ? 'Update Post' : 'Publish Post')}
+                {isSubmitting ? 'Guardando...' : (postId ? 'Actualizar Post' : 'Publicar Post')}
             </button>
         </div>
     );

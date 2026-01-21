@@ -36,12 +36,12 @@ const Header: React.FC = () => {
                     onClick={logout}
                     className="text-sm font-medium text-slate-500 hover:text-red-500 transition-colors focus:outline-none"
                 >
-                    Sign out
+                    Cerrar sesión
                 </button>
             </div>
         ) : (
             <Link to="/login" className="px-5 py-2 text-sm font-medium text-white bg-slate-900 rounded-full hover:bg-slate-800 transition-colors shadow-sm">
-                Login
+                Iniciar sesión
             </Link>
         )}
       </div>

@@ -69,9 +69,9 @@ const ProfilePage: React.FC = () => {
             .eq('id', profile.id);
 
         if (updateError) {
-            setError('Failed to update profile. Username might be taken.');
+            setError('Error al actualizar el perfil. El nombre de usuario podría estar ocupado.');
         } else {
-            setSuccess('Profile updated successfully!');
+            setSuccess('¡Perfil actualizado con éxito!');
             await refetchProfile(); // Refresh profile data in the app
         }
 
@@ -85,8 +85,8 @@ const ProfilePage: React.FC = () => {
     return (
         <div className="max-w-2xl mx-auto mt-10">
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                <h1 className="text-2xl font-bold text-slate-900 mb-1">Account Settings</h1>
-                <p className="text-slate-500 mb-8 text-sm">Manage your public profile and details.</p>
+                <h1 className="text-2xl font-bold text-slate-900 mb-1">Configuración de la cuenta</h1>
+                <p className="text-slate-500 mb-8 text-sm">Gestiona tu perfil público y detalles.</p>
                 
                 <form onSubmit={handleUpdateProfile} className="space-y-8">
                     {/* Avatar Section */}
@@ -102,23 +102,23 @@ const ProfilePage: React.FC = () => {
                                 )}
                             </div>
                             <label htmlFor="avatar-upload" className="absolute inset-0 flex items-center justify-center bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-full">
-                                <span className="text-xs font-medium">Change</span>
+                                <span className="text-xs font-medium">Cambiar</span>
                             </label>
                             <input id="avatar-upload" type="file" onChange={handleAvatarChange} accept="image/*" className="hidden"/>
                         </div>
                         <div>
-                            <h3 className="font-medium text-slate-900">Profile Picture</h3>
-                            <p className="text-xs text-slate-500 mt-1">Recommended: Square JPG, PNG. Max 2MB.</p>
+                            <h3 className="font-medium text-slate-900">Foto de perfil</h3>
+                            <p className="text-xs text-slate-500 mt-1">Recomendado: JPG, PNG cuadrado. Máx 2MB.</p>
                         </div>
                     </div>
 
                     <div className="grid gap-6">
                         <div>
-                            <label htmlFor="email" className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email</label>
+                            <label htmlFor="email" className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Correo electrónico</label>
                             <input type="email" id="email" value={session?.user?.email || ''} disabled className="block w-full px-4 py-3 bg-slate-50 border-transparent rounded-lg text-slate-500 text-sm focus:ring-0 cursor-not-allowed"/>
                         </div>
                         <div>
-                            <label htmlFor="username" className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Username</label>
+                            <label htmlFor="username" className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Nombre de usuario</label>
                             <input 
                                 type="text" 
                                 id="username" 
@@ -139,7 +139,7 @@ const ProfilePage: React.FC = () => {
                             disabled={loading} 
                             className="px-6 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                         >
-                            {loading ? 'Saving Changes...' : 'Save Changes'}
+                            {loading ? 'Guardando cambios...' : 'Guardar cambios'}
                         </button>
                     </div>
                 </form>
