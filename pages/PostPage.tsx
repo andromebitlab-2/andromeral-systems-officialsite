@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../services/supabase';
@@ -23,7 +22,7 @@ const PostPage: React.FC = () => {
         .from('posts')
         .select(`
           *,
-          profiles (username),
+          profiles (*),
           post_blocks (*),
           tags (*)
         `)
@@ -43,16 +42,29 @@ const PostPage: React.FC = () => {
 
   if (loading) return <Spinner />;
   if (!post) return <div className="text-center text-red-500">Post not found.</div>;
+  
+  const author = post.profiles;
+  const authorInitial = author?.username ? author.username.charAt(0).toUpperCase() : '?';
 
   return (
     <article className="max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-xl">
       <img src={post.banner_image_url} alt={post.title} className="w-full h-96 object-cover rounded-t-lg mb-8" />
       <header className="mb-8">
         <h1 className="text-5xl font-extrabold text-gray-900 mb-4">{post.title}</h1>
-        <div className="text-gray-500 text-sm">
-          <span>By {post.profiles?.username || 'Unknown'}</span>
-          <span className="mx-2">&bull;</span>
-          <span>{new Date(post.created_at).toLocaleDateString()}</span>
+        <div className="flex items-center text-gray-500 text-sm">
+          {author?.avatar_url ? (
+            <img src={author.avatar_url} alt={author.username || 'author'} className="w-10 h-10 rounded-full mr-4 object-cover" />
+          ) : (
+             <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-4">
+                <span className="font-semibold text-gray-500 text-lg">{authorInitial}</span>
+            </div>
+          )}
+          <div>
+            <span>By {author?.username || 'Unknown'}</span>
+            <div className="flex items-center">
+                <span>{new Date(post.created_at).toLocaleDateString()}</span>
+            </div>
+          </div>
         </div>
         <div className="flex flex-wrap gap-2 mt-4">
             {post.tags?.map(tag => (

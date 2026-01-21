@@ -5,10 +5,12 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
 import FeedPage from './pages/FeedPage';
 import PostPage from './pages/PostPage';
 import AdminPage from './pages/AdminPage';
+import ProfilePage from './pages/ProfilePage';
 
 const App: React.FC = () => {
   return (
@@ -23,14 +25,23 @@ const App: React.FC = () => {
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignupPage />} />
                   <Route path="/creative-imagination" element={<FeedPage key="creative-imagination" category="Creative Imagination" />} />
                   <Route path="/helaia" element={<FeedPage key="helaia" category="HelaIA" />} />
                   <Route path="/otros" element={<FeedPage key="otros" category="Otros" />} />
                   <Route path="/posts/:id" element={<PostPage />} />
                   <Route
-                    path="/admin/:postId?"
+                    path="/profile"
                     element={
                       <ProtectedRoute>
+                        <ProfilePage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/:postId?"
+                    element={
+                      <ProtectedRoute requireStaff={true}>
                         <AdminPage />
                       </ProtectedRoute>
                     }
@@ -46,14 +57,27 @@ const App: React.FC = () => {
   );
 };
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { profile, loading } = useAuth();
+interface ProtectedRouteProps {
+    children: React.ReactNode;
+    requireStaff?: boolean;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireStaff = false }) => {
+    const { profile, session, loading } = useAuth();
 
     if (loading) {
         return <div>Loading...</div>; // Or a spinner
     }
 
-    return profile?.is_staff ? <>{children}</> : <Navigate to="/login" />;
+    if (!session) {
+        return <Navigate to="/login" />;
+    }
+
+    if (requireStaff && !profile?.is_staff) {
+        return <Navigate to="/" />;
+    }
+
+    return <>{children}</>;
 };
 
 

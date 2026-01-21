@@ -1,5 +1,4 @@
-
-import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, useContext, ReactNode, useCallback } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../services/supabase';
 import type { Profile } from '../types';
@@ -9,6 +8,7 @@ interface AuthContextType {
     profile: Profile | null;
     loading: boolean;
     logout: () => Promise<void>;
+    refetchProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +17,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [session, setSession] = useState<Session | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
+    
+    const fetchProfile = useCallback(async (user: User) => {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+        if (data) {
+            setProfile(data as Profile);
+        } else if (error) {
+            console.error('Error fetching profile:', error);
+            setProfile(null);
+        }
+    }, []);
 
     useEffect(() => {
         const fetchSession = async () => {
@@ -37,25 +51,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             } else {
                 setProfile(null);
             }
+            // Ensure loading is false after initial auth check.
+            if(event === 'INITIAL_SESSION') setLoading(false);
         });
 
         return () => {
             authListener.subscription.unsubscribe();
         };
-    }, []);
+    }, [fetchProfile]);
     
-    const fetchProfile = async (user: User) => {
-        const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .single();
-        if (data) {
-            setProfile(data as Profile);
-        } else if (error) {
-            console.error('Error fetching profile:', error);
-        }
-    };
+    const refetchProfile = useCallback(async () => {
+      if (session?.user) {
+        await fetchProfile(session.user);
+      }
+    }, [session, fetchProfile]);
 
 
     const logout = async () => {
@@ -69,9 +78,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         profile,
         loading,
         logout,
+        refetchProfile,
     };
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

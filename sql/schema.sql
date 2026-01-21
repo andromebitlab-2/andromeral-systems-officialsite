@@ -1,4 +1,3 @@
-
 -- ### ANDROMERAL SYSTEMS SCHEMA ###
 
 -- 1. PROFILES TABLE
@@ -7,6 +6,7 @@ CREATE TABLE public.profiles (
   id uuid NOT NULL REFERENCES auth.users ON DELETE CASCADE,
   username text UNIQUE,
   is_staff boolean DEFAULT false NOT NULL,
+  avatar_url text, -- ADDED: To store user profile picture URL
   PRIMARY KEY (id)
 );
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
@@ -132,25 +132,22 @@ CREATE POLICY "Staff can manage post blocks." ON public.post_blocks FOR ALL USIN
 
 -- ### STORAGE ###
 --
+-- INSTRUCTIONS:
 -- 1. In the Supabase dashboard, go to Storage and create a new public bucket named 'post-banners'.
---
--- 2. In the Supabase SQL Editor, run the following policies to secure your bucket.
+-- 2. In the Supabase dashboard, go to Storage and create another new public bucket named 'avatars'.
+-- 3. In the Supabase SQL Editor, run all the policies below to secure your buckets.
 
-CREATE POLICY "Public read access for post banners"
-ON storage.objects FOR SELECT
-USING ( bucket_id = 'post-banners' );
+-- Policies for 'post-banners' bucket
+CREATE POLICY "Public read access for post banners" ON storage.objects FOR SELECT USING ( bucket_id = 'post-banners' );
+CREATE POLICY "Staff can manage post banners" ON storage.objects FOR INSERT WITH CHECK ( bucket_id = 'post-banners' AND is_staff() );
+CREATE POLICY "Staff can update post banners" ON storage.objects FOR UPDATE USING ( bucket_id = 'post-banners' AND is_staff() );
+CREATE POLICY "Staff can delete post banners" ON storage.objects FOR DELETE USING ( bucket_id = 'post-banners' AND is_staff() );
 
-CREATE POLICY "Staff can manage post banners"
-ON storage.objects FOR INSERT
-WITH CHECK ( bucket_id = 'post-banners' AND is_staff() );
-
-CREATE POLICY "Staff can update post banners"
-ON storage.objects FOR UPDATE
-USING ( bucket_id = 'post-banners' AND is_staff() );
-
-CREATE POLICY "Staff can delete post banners"
-ON storage.objects FOR DELETE
-USING ( bucket_id = 'post-banners' AND is_staff() );
+-- Policies for 'avatars' bucket
+CREATE POLICY "Public read access for avatars" ON storage.objects FOR SELECT USING ( bucket_id = 'avatars' );
+CREATE POLICY "Users can upload their own avatar" ON storage.objects FOR INSERT WITH CHECK ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
+CREATE POLICY "Users can update their own avatar" ON storage.objects FOR UPDATE USING ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
+CREATE POLICY "Users can delete their own avatar" ON storage.objects FOR DELETE USING ( bucket_id = 'avatars' AND auth.uid() = (storage.foldername(name))[1]::uuid );
 
 
 -- ### ADMIN SETUP INSTRUCTIONS ###

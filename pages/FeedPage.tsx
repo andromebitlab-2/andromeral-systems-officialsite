@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../services/supabase';
 import type { Post } from '../types';
@@ -25,7 +24,7 @@ const FeedPage: React.FC<FeedPageProps> = ({ category }) => {
         .from('posts')
         .select(`
             *,
-            profiles (username),
+            profiles (*),
             tags (*)
         `)
         .eq('category', category)
@@ -56,7 +55,7 @@ const FeedPage: React.FC<FeedPageProps> = ({ category }) => {
     <div>
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-4xl font-bold">{category}</h1>
-            {profile?.is_staff && (category === 'HelaIA') && (
+            {profile?.is_staff && (
                 <Link to="/admin" className="px-4 py-2 text-white bg-gradient-to-r from-[rgb(146,163,243)] to-[rgb(241,125,215)] rounded-lg shadow-md hover:shadow-lg transition-shadow">
                     + New Post
                 </Link>

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../services/supabase';
 
 const LoginPage: React.FC = () => {
@@ -79,6 +78,12 @@ const LoginPage: React.FC = () => {
             </button>
           </div>
         </form>
+         <p className="mt-4 text-sm text-center text-gray-600">
+          Don't have an account?{' '}
+          <Link to="/signup" className="font-medium text-[rgb(146,163,243)] hover:text-[rgb(120,135,215)]">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
-
 export interface Profile {
   id: string;
   username: string;
   is_staff: boolean;
+  avatar_url?: string | null;
 }
 
 export interface Post {
@@ -166,16 +166,19 @@ export interface Database {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           id: string
           is_staff: boolean
           username: string | null
         }
         Insert: {
+          avatar_url?: string | null
           id: string
           is_staff?: boolean
           username?: string | null
         }
         Update: {
+          avatar_url?: string | null
           id?: string
           is_staff?: boolean
           username?: string | null
