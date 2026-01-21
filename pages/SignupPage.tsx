@@ -41,6 +41,7 @@ const SignupPage: React.FC = () => {
 
         if (uploadError) {
             setError('Could not upload avatar, but user was created.');
+            console.error('Avatar upload error:', uploadError);
         } else {
             const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(fileName);
              const { error: updateError } = await supabase
@@ -49,15 +50,17 @@ const SignupPage: React.FC = () => {
                 .eq('id', user.id);
             if (updateError) {
                 setError('Could not save avatar URL, but user was created and avatar uploaded.');
+                console.error('Profile update error:', updateError);
             }
         }
     }
     
     setLoading(false);
-    if (!error) {
-        alert('Signup successful! Please check your email to confirm your account.');
-        navigate('/login');
-    }
+    // Since email confirmation is disabled, a successful signup also logs the user in.
+    // We navigate to the homepage, and the AuthContext will reflect the new session.
+    // This happens even if there was a non-critical error uploading the avatar,
+    // as the user account was still created successfully.
+    navigate('/');
   };
 
   return (

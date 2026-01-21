@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Spinner from '../components/Spinner';
 
 const ProfilePage: React.FC = () => {
-    const { profile, refetchProfile } = useAuth();
+    const { profile, refetchProfile, session } = useAuth();
     const [username, setUsername] = useState('');
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -82,7 +82,7 @@ const ProfilePage: React.FC = () => {
             <form onSubmit={handleUpdateProfile} className="space-y-6">
                  <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" value={profile.id} disabled className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm cursor-not-allowed"/>
+                    <input type="email" id="email" value={session?.user?.email || ''} disabled className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm cursor-not-allowed"/>
                  </div>
                  <div>
                     <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
